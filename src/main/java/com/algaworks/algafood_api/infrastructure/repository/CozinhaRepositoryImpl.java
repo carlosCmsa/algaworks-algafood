@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.infrastructure.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -23,8 +24,8 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     }
 
     @Override
-    public Cozinha buscar(long id) {
-        return entityManager.find(Cozinha.class, id);
+    public Optional<Cozinha> buscar(long id) {
+        return Optional.ofNullable(entityManager.find(Cozinha.class, id));
     }
 
     @Transactional
@@ -36,8 +37,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository {
     @Transactional
     @Override
     public void remover(Cozinha cozinha) {
-        Cozinha cz = this.buscar(cozinha.getId());
-        entityManager.remove(cz);
+        entityManager.remove(cozinha);
     }
     
 }

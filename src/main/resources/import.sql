@@ -11,3 +11,8 @@ insert into estado(nome) values('Espirito Santo');
 insert into estado(nome) values('Amapa');
 insert into estado(nome) values('Rio Grande do Sul');
 insert into estado(nome) values('Distrito Federal');
+
+insert into cidade(nome, estado_id) values('Suzano', 1);
+insert into cidade(nome, estado_id) values('Mogi das Cruzes', 1);
+insert into cidade(nome, estado_id) values('Itaim Paulista', 1);
+

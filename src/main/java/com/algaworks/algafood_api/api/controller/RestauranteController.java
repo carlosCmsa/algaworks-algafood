@@ -2,6 +2,7 @@ package com.algaworks.algafood_api.api.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,10 +48,10 @@ public class RestauranteController {
     }
 
     @PostMapping
-    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante requisicao, HttpServletRequest http) {
+    public ResponseEntity<Restaurante> adicionar(@RequestBody Restaurante body, HttpServletRequest http) {
 
         try {
-            Restaurante restaurante = cadastroRestauranteService.adicionar(requisicao);
+            Restaurante restaurante = cadastroRestauranteService.adicionar(body);
 
             URI uri = URI.create(String.format("%s/%s", http.getRequestURI(), restaurante.getId()));
 
@@ -61,10 +63,21 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurante> atualizar(@PathVariable long id, @RequestBody Restaurante requisicao) {
+    public ResponseEntity<Restaurante> atualizar(@PathVariable long id, @RequestBody Restaurante body) {
         
         try {
-            return ResponseEntity.ok(cadastroRestauranteService.atualizar(id, requisicao));
+            return ResponseEntity.ok(cadastroRestauranteService.atualizar(id, body));
+        } catch(NoResultException e) {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Restaurante> atualizar(@PathVariable long id, @RequestBody Map<String, Object> body) {
+
+        try {
+            return ResponseEntity.ok(cadastroRestauranteService.atualizar(id, body));
         } catch(NoResultException e) {
             return ResponseEntity.notFound().build();
         }

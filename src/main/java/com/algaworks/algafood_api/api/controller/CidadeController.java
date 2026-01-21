@@ -16,29 +16,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algafood_api.domain.model.Estado;
-import com.algaworks.algafood_api.domain.service.CadastroEstadoService;
+import com.algaworks.algafood_api.domain.model.Cidade;
+import com.algaworks.algafood_api.domain.service.CadastroCidadeService;
 
 import jakarta.persistence.NoResultException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping(path = "/api/v1/estados")
-public class EstadoController {
+@RequestMapping(path = "/api/v1/cidades")
+public class CidadeController {
     
     @Autowired
-    CadastroEstadoService cadastroEstadoService;
-    
+    CadastroCidadeService cadastroCidadeService;
+
     @GetMapping
-    public ResponseEntity<List<Estado>> listar() {
-        return ResponseEntity.ok(cadastroEstadoService.listar());
+    public ResponseEntity<List<Cidade>> listar() {
+        return ResponseEntity.ok(cadastroCidadeService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Estado> buscar(@PathVariable long id) {
+    public ResponseEntity<Cidade> buscar(@PathVariable long id) {
 
         try {
-            return ResponseEntity.ok(cadastroEstadoService.buscar(id));
+            return ResponseEntity.ok(cadastroCidadeService.buscar(id));
         } catch(NoResultException e) {
             return ResponseEntity.notFound().build();
         }
@@ -46,19 +46,25 @@ public class EstadoController {
     }
 
     @PostMapping
-    public ResponseEntity<Estado> adicionar(@RequestBody Estado body, HttpServletRequest http) {
-        Estado estado = cadastroEstadoService.adicionar(body);
+    public ResponseEntity<Cidade> adicionar(@RequestBody Cidade body, HttpServletRequest http) {
+        
+        try {
+            Cidade cidade = cadastroCidadeService.adicionar(body);
 
-        URI uri = URI.create(String.format("%s/%d", http.getRequestURI(), estado.getId()));
+            URI uri = URI.create(String.format("%s/%d", http.getRequestURI(), cidade.getId()));
 
-        return ResponseEntity.created(uri).body(estado);
+            return ResponseEntity.created(uri).body(cidade);
+        } catch(NoResultException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Estado> atualizar(@PathVariable long id, @RequestBody Estado body) {
+    public ResponseEntity<Cidade> atualizar(@PathVariable long id, @RequestBody Cidade body) {
 
         try {
-            return ResponseEntity.ok(cadastroEstadoService.atualizar(id, body));
+            return ResponseEntity.ok(cadastroCidadeService.atualizar(id, body));
         } catch(NoResultException e) {
             return ResponseEntity.notFound().build();
         }
@@ -69,6 +75,7 @@ public class EstadoController {
     public ResponseEntity<Void> remover(@PathVariable long id) {
 
         try {
+            cadastroCidadeService.remover(id);
             return ResponseEntity.noContent().build();
         } catch(NoResultException e) {
             return ResponseEntity.notFound().build();

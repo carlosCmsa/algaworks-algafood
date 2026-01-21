@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.infrastructure.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -22,8 +23,8 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     }
 
     @Override
-    public Restaurante buscar(long id) {
-        return entityManager.find(Restaurante.class, id);
+    public Optional<Restaurante> buscar(long id) {
+        return Optional.ofNullable(entityManager.find(Restaurante.class, id));
     }
 
     @Override
@@ -33,8 +34,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
 
     @Override
     public void remover(Restaurante restaurante) {
-        Restaurante rt = buscar(restaurante.getId());
-        entityManager.remove(rt);
+        entityManager.remove(restaurante);
     }
 
 }

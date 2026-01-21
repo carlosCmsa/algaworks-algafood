@@ -45,9 +45,9 @@ public class CozinhaController {
     }
 
     @PostMapping
-    public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha requisicao, HttpServletRequest http) {
-        Cozinha cozinha = cadastroCozinhaService.adicionar(requisicao);
-        URI uri = URI.create(String.format("%s/%s", http.getRequestURI(), requisicao.getId()));
+    public ResponseEntity<Cozinha> adicionar(@RequestBody Cozinha body, HttpServletRequest http) {
+        Cozinha cozinha = cadastroCozinhaService.adicionar(body);
+        URI uri = URI.create(String.format("%s/%s", http.getRequestURI(), body.getId()));
 
         return ResponseEntity
             .created(uri)
@@ -55,8 +55,8 @@ public class CozinhaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cozinha> atualizar(@PathVariable long id, @RequestBody Cozinha requisicao) {
-        return ResponseEntity.ok(cadastroCozinhaService.atualizar(id, requisicao));
+    public ResponseEntity<Cozinha> atualizar(@PathVariable long id, @RequestBody Cozinha body) {
+        return ResponseEntity.ok(cadastroCozinhaService.atualizar(id, body));
     }
 
     @DeleteMapping("/{id}")

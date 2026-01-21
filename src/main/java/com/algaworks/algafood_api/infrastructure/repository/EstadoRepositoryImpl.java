@@ -1,6 +1,7 @@
 package com.algaworks.algafood_api.infrastructure.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -22,23 +23,18 @@ public class EstadoRepositoryImpl implements EstadoRepository {
     }
 
     @Override
-    public Estado buscar(long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscar'");
+    public Optional<Estado> buscar(long id) {
+        return Optional.ofNullable(entityManager.find(Estado.class, id));
     }
 
     @Override
     public Estado adicionar(Estado estado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'adicionar'");
+        return entityManager.merge(estado);
     }
 
     @Override
     public void remover(Estado estado) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remover'");
+        entityManager.remove(estado);
     }
-    
-
 
 }
