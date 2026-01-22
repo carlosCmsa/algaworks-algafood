@@ -25,22 +25,22 @@ public class CadastroCidadeService {
     private EstadoRepository estadoRepository;
 
     public List<Cidade> listar() {
-        return cidadeRepository.listar();
+        return cidadeRepository.findAll();
     }
 
     public Cidade buscar(long id) {
-        return cidadeRepository.buscar(id).orElseThrow(
+        return cidadeRepository.findById(id).orElseThrow(
             () -> new NoResultException("Não foi possível encontrar nenhuma cidade para o identificador informado."));
     }
 
     @Transactional
     public Cidade adicionar(Cidade cidade) {
-        Estado estado = estadoRepository.buscar(cidade.getEstado().getId()).orElseThrow(
+        Estado estado = estadoRepository.findById(cidade.getEstado().getId()).orElseThrow(
             () -> new NoResultException("Não foi possível encontrar nenhum estado para o identificador informado."));
         
         cidade.setEstado(estado);
 
-        return cidadeRepository.adicionar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     @Transactional
@@ -49,7 +49,7 @@ public class CadastroCidadeService {
 
         BeanUtils.copyProperties(cidade, cidadeAtual, "id", "estado");
 
-        return cidadeRepository.adicionar(cidadeAtual);
+        return cidadeRepository.save(cidadeAtual);
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class CadastroCidadeService {
         Cidade cidade = this.buscar(id);
 
         try {
-            cidadeRepository.remover(cidade);
+            cidadeRepository.delete(cidade);
         } catch(DataIntegrityViolationException e) {
             throw e;
         }

@@ -20,17 +20,17 @@ public class CadastroEstadoService {
     private EstadoRepository estadoRepository;
 
     public List<Estado> listar() {
-        return estadoRepository.listar();
+        return estadoRepository.findAll();
     }
 
     public Estado buscar(long id) {
-        return estadoRepository.buscar(id).orElseThrow(
+        return estadoRepository.findById(id).orElseThrow(
             () -> new NoResultException("Não foi possível encontrar nenhum estado para o identificador informado."));
     }
 
     @Transactional
     public Estado adicionar(Estado estado) {
-        return estadoRepository.adicionar(estado);
+        return estadoRepository.save(estado);
     }
 
     @Transactional
@@ -39,7 +39,7 @@ public class CadastroEstadoService {
 
         BeanUtils.copyProperties(estado, estadoAtual, "id");
 
-        return estadoRepository.adicionar(estadoAtual);
+        return estadoRepository.save(estadoAtual);
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class CadastroEstadoService {
         Estado estado = this.buscar(id);
 
         try {
-            estadoRepository.remover(estado);
+            estadoRepository.delete(estado);
         } catch(DataIntegrityViolationException e) {
             throw e; 
         }

@@ -3,7 +3,6 @@ package com.algaworks.algafood_api.domain.service;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +27,11 @@ public class CadastroRestauranteService {
     private CadastroCozinhaService cadastroCozinhaService;
 
     public List<Restaurante> listar() {
-        return restauranteRepository.listar();
+        return restauranteRepository.findAll();
     }
 
     public Restaurante buscar(long id) {
-        Restaurante restaurante = restauranteRepository.buscar(id).orElseThrow(() ->
+        Restaurante restaurante = restauranteRepository.findById(id).orElseThrow(() ->
             new NoResultException("Não foi possível encontrar nenhum restaurante para o identificador informado."));
 
         return restaurante;
@@ -43,16 +42,12 @@ public class CadastroRestauranteService {
     public Restaurante adicionar(Restaurante restaurante) {
         cadastroCozinhaService.buscar(restaurante.getCozinha().getId());
 
-        return restauranteRepository.adicionar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     @Transactional
     public Restaurante atualizar(long id, Restaurante restaurante) {
         Restaurante restauranteAtual = this.buscar(id);
-
-        if(Objects.isNull(restauranteAtual)) {
-            throw new NoResultException("Não foi possível encontrar nenhum restaurante para o identificador informado.");
-        }
 
         BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "cozinha");
 
@@ -75,7 +70,7 @@ public class CadastroRestauranteService {
             ReflectionUtils.setField(field, restaurante, novoValor);
         });
 
-        return restauranteRepository.adicionar(restaurante);
+        return restauranteRepository.save(restaurante);
     }
 
     @Transactional
@@ -83,7 +78,7 @@ public class CadastroRestauranteService {
         Restaurante restaurante = this.buscar(id);
 
         try {
-            restauranteRepository.remover(restaurante);
+            restauranteRepository.delete(restaurante);
         } catch(DataIntegrityViolationException e) {
             throw e;
         }
