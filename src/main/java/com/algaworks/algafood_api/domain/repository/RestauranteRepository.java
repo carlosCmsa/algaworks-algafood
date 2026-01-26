@@ -12,7 +12,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
+public interface RestauranteRepository extends JpaRepository<Restaurante, Long>, CustomizedRestauranteRepository {
 
     List<Restaurante> findByAtivoAndTaxaFreteBetween(boolean ativo, BigDecimal taxaFreteInicial, BigDecimal taxaFreteFinal);
 

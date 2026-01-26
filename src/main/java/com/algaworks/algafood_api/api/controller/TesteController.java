@@ -62,4 +62,29 @@ public class TesteController {
         return ResponseEntity.ok(restauranteRepository.consultarPorCozinhaENome(cozinhaId, nome).get());
     }
 
+    @GetMapping("/restaurantes/nome/taxa")
+    public ResponseEntity<List<Restaurante>> findByNomeAndTaxa(@RequestParam String nome, 
+                                                                @RequestParam BigDecimal taxaFreteInicial,
+                                                                @RequestParam BigDecimal taxaFreteFinal) {
+        return ResponseEntity.ok(restauranteRepository.find(nome, taxaFreteInicial, taxaFreteFinal));
+    }
+
+    @GetMapping("/restaurantes/filter")
+    public ResponseEntity<List<Restaurante>> findByFilters(@RequestParam(required = false) String nome, 
+                                                                @RequestParam(required = false) BigDecimal taxaInicial,
+                                                                @RequestParam(required = false) BigDecimal taxaFinal,
+                                                                @RequestParam(required = false) Boolean ativo,
+                                                                @RequestParam(required = false) Boolean aberto) {
+        return ResponseEntity.ok(restauranteRepository.filter(nome, taxaInicial, taxaFinal, ativo, aberto));
+    }
+
+    @GetMapping("/restaurantes/filter/criteria")
+    public ResponseEntity<List<Restaurante>> findByFiltersCriteria(@RequestParam(required = false) String nome, 
+                                                                @RequestParam(required = false) BigDecimal taxaInicial,
+                                                                @RequestParam(required = false) BigDecimal taxaFinal,
+                                                                @RequestParam(required = false) Boolean ativo,
+                                                                @RequestParam(required = false) Boolean aberto) {
+        return ResponseEntity.ok(restauranteRepository.filterByCriteria(nome, taxaInicial, taxaFinal, ativo, aberto));
+    }
+
 }
